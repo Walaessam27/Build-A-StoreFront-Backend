@@ -4,10 +4,10 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
-    "tsc": "tsc",
-    "test": "export ENV=test && db-migrate up --env test && tsc && jasmine"
-  },
+  "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
+  "tsc": "tsc",
+  "test": "ENV=test db-migrate up --env test && tsc && jasmine"
+},
   "author": "Udacity",
   "license": "ISC",
   "dependencies": {
@@ -26,7 +26,6 @@
     "@types/body-parser": "1.19.0",
     "@types/express-serve-static-core": "4.17.1",
     "@types/jasmine": "^6.0.0",
-    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "8.5.0",
     "@types/node": "10.17.60",
     "@types/pg": "8.6.1",

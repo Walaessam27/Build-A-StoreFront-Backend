@@ -5,12 +5,13 @@
     "lib": ["es2017", "dom"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": false,
+    "strict": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "moduleResolution": "node",
     "ignoreDeprecations": "6.0",
-    "moduleResolution": "node"
+    "types": ["node", "jasmine"]
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }

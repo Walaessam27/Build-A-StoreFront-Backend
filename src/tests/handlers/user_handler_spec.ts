@@ -35,4 +35,11 @@ describe('User Endpoints', () => {
     expect(response.status).toBe(200);
     expect(response.body.firstName).toBeDefined();
   });
+
+  it('should show a user by id', async () => {
+  const response = await request
+    .get('/users/1') 
+    .set('Authorization', `Bearer ${token}`);
+  expect(response.status).toBe(200);
+});
 });

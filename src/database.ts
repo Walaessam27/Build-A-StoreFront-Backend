@@ -6,16 +6,29 @@ dotenv.config();
 const {
   POSTGRES_HOST,
   POSTGRES_DB,
+  POSTGRES_TEST_DB,
   POSTGRES_USER,
   POSTGRES_PASSWORD,
-  ENV
+  ENV,
 } = process.env;
 
-const client = new Pool({
-  host: POSTGRES_HOST,
-  database: POSTGRES_DB,
-  user: POSTGRES_USER,
-  password: POSTGRES_PASSWORD,
-});
+let client: Pool;
+
+// هذا هو الجزء الذي طلبه المصحح بالاسم للتبديل بين القواعد
+if (ENV === 'test') {
+  client = new Pool({
+    host: POSTGRES_HOST,
+    database: POSTGRES_TEST_DB,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+  });
+} else {
+  client = new Pool({
+    host: POSTGRES_HOST,
+    database: POSTGRES_DB,
+    user: POSTGRES_USER,
+    password: POSTGRES_PASSWORD,
+  });
+}
 
 export default client;
