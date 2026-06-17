@@ -1,4 +1,3 @@
-/// <reference types="jest" />
 import { ProductStore } from '../../models/product';
 
 const store = new ProductStore();

@@ -15,19 +15,19 @@ const {
 let client: Pool;
 
 // هذا هو الجزء الذي طلبه المصحح بالاسم للتبديل بين القواعد
-if (ENV === 'test') {
+if (process.env.ENV === 'test') {
   client = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_TEST_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD,
+    host: process.env.POSTGRES_HOST,
+    database: process.env.POSTGRES_TEST_DB, // تأكدي من هذا السطر
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
   });
 } else {
   client = new Pool({
-    host: POSTGRES_HOST,
-    database: POSTGRES_DB,
-    user: POSTGRES_USER,
-    password: POSTGRES_PASSWORD,
+    host: process.env.POSTGRES_HOST,
+    database: process.env.POSTGRES_DB,
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
   });
 }
 
