@@ -1,11 +1,11 @@
 import Client from '../database';
 
-export type Product = {
+export interface Product {
   id?: number;
   name: string;
   price: number;
   category?: string;
-};
+}
 
 export class ProductStore {
   async index(): Promise<Product[]> {
@@ -16,7 +16,19 @@ export class ProductStore {
       conn.release();
       return result.rows;
     } catch (err) {
-      throw new Error("Could not get products. " + err);
+      throw new Error(`Could not get products: ${err}`);
+    }
+  }
+
+  async show(id: string): Promise<Product> {
+    try {
+      const sql = 'SELECT * FROM products WHERE id=($1)';
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) {
+      throw new Error(`Could not find product ${id}. Error: ${err}`);
     }
   }
 
@@ -28,7 +40,7 @@ export class ProductStore {
       conn.release();
       return result.rows[0];
     } catch (err) {
-      throw new Error("Could not add product. " + err);
+      throw new Error(`Could not add product ${p.name}: ${err}`);
     }
   }
 }

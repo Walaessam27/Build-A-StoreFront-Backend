@@ -40,3 +40,37 @@ These are the notes from a meeting with the frontend developer that describe wha
 - user_id
 - status of order (active or complete)
 
+
+
+### Database Schema
+
+#### Table: users
+| Column | Type | Description |
+| --- | --- | --- |
+| id | SERIAL | Primary Key |
+| firstName | VARCHAR(100) | User's first name |
+| lastName | VARCHAR(100) | User's last name |
+| password_digest | VARCHAR | Hashed password |
+
+#### Table: products
+| Column | Type | Description |
+| --- | --- | --- |
+| id | SERIAL | Primary Key |
+| name | VARCHAR(255) | Product name |
+| price | INTEGER | Product price |
+| category | VARCHAR(100) | Optional category |
+
+#### Table: orders
+| Column | Type | Description |
+| --- | --- | --- |
+| id | SERIAL | Primary Key |
+| user_id | INTEGER | Foreign Key to users.id |
+| status | VARCHAR(20) | 'active' or 'complete' |
+
+#### Table: order_products
+| Column | Type | Description |
+| --- | --- | --- |
+| id | SERIAL | Primary Key |
+| order_id | INTEGER | Foreign Key to orders.id |
+| product_id | INTEGER | Foreign Key to products.id |
+| quantity | INTEGER | Quantity of products |
