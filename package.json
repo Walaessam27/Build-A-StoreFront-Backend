@@ -5,8 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess 'node ./dist/server.js'",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "test": "export ENV=test && db-migrate up --env test && tsc && jasmine"
   },
   "author": "Udacity",
   "license": "ISC",

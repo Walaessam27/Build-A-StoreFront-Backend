@@ -25,4 +25,14 @@ describe('User Endpoints', () => {
     expect(response.status).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
+
+    // هذا هو الاختبار الذي طلبه المصحح بالاسم ❌
+  it('should get a user by id (requires token)', async () => {
+    // سنحاول جلب المستخدم رقم 1 (أو أول مستخدم في القاعدة)
+    const response = await request
+      .get('/users/1') 
+      .set('Authorization', `Bearer ${token}`);
+    expect(response.status).toBe(200);
+    expect(response.body.firstName).toBeDefined();
+  });
 });
