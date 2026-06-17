@@ -17,7 +17,7 @@ export class UserStore {
   async index(): Promise<User[]> {
     try {
       const conn = await Client.connect();
-      const sql = 'SELECT id, firstName, lastName FROM users';
+      const sql = 'SELECT id, firstName AS "firstName", lastName AS "lastName" FROM users';
       const result = await conn.query(sql);
       conn.release();
       return result.rows;
@@ -29,31 +29,25 @@ export class UserStore {
   async create(u: User): Promise<User> {
     try {
       const conn = await Client.connect();
-      const sql = 'INSERT INTO users (firstName, lastName, password_digest) VALUES($1, $2, $3) RETURNING id, firstName, lastName';
-      
-      const rounds = parseInt(SALT_ROUNDS as string) || 10;
-      const pass = (u.password as string) + BCRYPT_PASSWORD;
-      
-      // استخدام any هنا ينهي مشكلة الـ Type mismatch تماماً
-      const hash = bcrypt.hashSync(pass as any, rounds as any);
-
+      const sql = 'INSERT INTO users (firstName, lastName, password_digest) VALUES($1, $2, $3) RETURNING id, firstName AS "firstName", lastName AS "lastName"';
+      const hash = bcrypt.hashSync((u.password as string) + BCRYPT_PASSWORD, parseInt(SALT_ROUNDS as string));
       const result = await conn.query(sql, [u.firstName, u.lastName, hash]);
       conn.release();
       return result.rows[0];
-    } catch (err) {
-      throw new Error("Could not add user. " + err);
+    } catch (err) { 
+      throw new Error(`Could not add user: ${err}`); 
     }
   }
 
   async show(id: string): Promise<User> {
-  try {
-    const sql = 'SELECT id, firstName, lastName FROM users WHERE id=($1)';
-    const conn = await Client.connect();
-    const result = await conn.query(sql, [id]);
-    conn.release();
-    return result.rows[0];
-  } catch (err) {
-    throw new Error(`Could not find user. Error: ${err}`);
+    try {
+      const conn = await Client.connect();
+      const sql = 'SELECT id, firstName AS "firstName", lastName AS "lastName" FROM users WHERE id=($1)';
+      const result = await conn.query(sql, [id]);
+      conn.release();
+      return result.rows[0];
+    } catch (err) { 
+      throw new Error(`Could not find user: ${err}`); 
+    }
   }
-}
 }

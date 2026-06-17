@@ -5,9 +5,10 @@ import jwt from 'jsonwebtoken';
 
 const request = supertest(app);
 let token: string = '';
-let userId: number; // سنخزن الـ ID هنا
+let userId: number;
 
 describe('User Endpoints', () => {
+  // 1. اختبار إنشاء مستخدم (Create)
   it('should create a user and return a token', async () => {
     const response = await request
       .post('/users')
@@ -19,31 +20,26 @@ describe('User Endpoints', () => {
     expect(response.status).toBe(200);
     token = response.body as string;
     
-    // لفك تشفير التوكن ومعرفة الـ ID الحقيقي للمستخدم
+    // فك تشفير التوكن للحصول على الـ ID الحقيقي
     const decoded = jwt.decode(token) as { user: { id: number } };
     userId = decoded.user.id; 
   });
 
+  // 2. اختبار عرض قائمة المستخدمين (Index)
   it('should list users (requires token)', async () => {
     const response = await request
       .get('/users')
       .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
   });
 
+  // 3. اختبار عرض مستخدم واحد بواسطة الـ ID (Show) - طلب المصحح
   it('should get a user by id (requires token)', async () => {
-    // استخدمنا الـ ID الحقيقي الذي حصلنا عليه من التوكن
     const response = await request
       .get(`/users/${userId}`) 
       .set('Authorization', `Bearer ${token}`);
     expect(response.status).toBe(200);
     expect(response.body.firstName).toEqual('Ahmad');
   });
-});
-
-  it('should show a user by id', async () => {
-  const response = await request
-    .get(`/users/${userId}`) 
-    .set('Authorization', `Bearer ${token}`);
-  expect(response.status).toBe(200);
 });

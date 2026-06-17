@@ -14,6 +14,19 @@ const index = async (_req: Request, res: Response): Promise<void> => {
   }
 };
 
+const show = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await store.show(req.params.id);
+    if (!user) {
+        res.status(404).json('User not found');
+        return;
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
 const create = async (req: Request, res: Response): Promise<void> => {
   const user: User = {
     firstName: req.body.firstName as string,
@@ -31,6 +44,7 @@ const create = async (req: Request, res: Response): Promise<void> => {
 
 const user_routes = (app: Application): void => {
   app.get('/users', verifyAuthToken, index);
+  app.get('/users/:id', verifyAuthToken, show); // الرابط الذي طلبه المصحح
   app.post('/users', create);
 };
 
