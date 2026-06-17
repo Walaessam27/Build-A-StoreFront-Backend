@@ -1,23 +1,22 @@
 // @ts-ignore: missing type declarations for supertest
-
 import supertest from 'supertest';
 import app from '../../server';
 
 const request = supertest(app);
 let token: string = '';
+let productId: number; // سنخزن الـ ID هنا
 
 describe('Product Endpoints', () => {
   beforeAll(async () => {
-    // نحصل على توكن أولاً لأن إنشاء منتج يحتاج توكن
     const response = await request.post('/users').send({
       firstName: 'Product',
       lastName: 'Tester',
       password: 'password123'
     });
-    token = response.body;
+    token = response.body as string;
   });
 
-  it('should create a product (requires token)', async () => {
+  it('should create a product', async () => {
     const response = await request
       .post('/products')
       .set('Authorization', `Bearer ${token}`)
@@ -27,6 +26,7 @@ describe('Product Endpoints', () => {
         category: 'test'
       });
     expect(response.status).toBe(200);
+    productId = response.body.id; // أخذنا الـ ID الحقيقي للمنتج الذي أنشئ
   });
 
   it('should list products', async () => {
@@ -35,7 +35,9 @@ describe('Product Endpoints', () => {
   });
 
   it('should show a product', async () => {
-    const response = await request.get('/products/1');
+    // استخدمنا الـ ID الحقيقي بدل رقم 1
+    const response = await request.get(`/products/${productId}`);
     expect(response.status).toBe(200);
+    expect(response.body.name).toEqual('Test Product');
   });
 });
